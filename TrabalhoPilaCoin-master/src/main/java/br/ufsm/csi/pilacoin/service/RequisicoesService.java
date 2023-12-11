@@ -17,7 +17,7 @@ public class RequisicoesService {
         this.rabbitTemplate.convertAndSend(routingKey, json);
     }
 
-    @RabbitListener(queues = {"Dimas"})
+    @RabbitListener(queues = {"dimas"})
     public void recebeMensagem(@Payload Message message) {
         String responseMessage = new String(message.getBody());
         System.out.println("Mensagem: " + responseMessage);

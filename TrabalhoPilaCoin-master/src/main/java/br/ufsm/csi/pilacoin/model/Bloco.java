@@ -18,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonPropertyOrder(alphabetic = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class Bloco {
     private Long numeroBloco;
     private String nonceBlocoAnterior;

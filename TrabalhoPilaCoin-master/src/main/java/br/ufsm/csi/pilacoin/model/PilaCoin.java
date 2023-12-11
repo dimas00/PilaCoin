@@ -1,7 +1,6 @@
 package br.ufsm.csi.pilacoin.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,17 +8,25 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Entity
+@Table(name = "pilacoins") // O nome da tabela no banco de dados
 @AllArgsConstructor
 @Data
 @Builder
 @NoArgsConstructor
-@JsonPropertyOrder(alphabetic = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PilaCoin {
 
-    private byte[] chaveCriador;
-    private String nomeCriador;
-    private Date dataCriacao;
-    private String nonce;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Lob // Para lidar com campos grandes, como byte[]
+    private byte[] chaveCriador;
+
+    private String nomeCriador;
+
+    @Temporal(TemporalType.TIMESTAMP) // Indica o tipo de temporalidade do campo
+    private Date dataCriacao;
+
+    private String nonce;
 }

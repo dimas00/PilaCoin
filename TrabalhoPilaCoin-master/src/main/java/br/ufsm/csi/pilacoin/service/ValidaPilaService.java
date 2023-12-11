@@ -4,7 +4,9 @@ import br.ufsm.csi.pilacoin.model.Chaves;
 import br.ufsm.csi.pilacoin.model.PilaCoin;
 import br.ufsm.csi.pilacoin.model.PilaCoinJson;
 import br.ufsm.csi.pilacoin.model.ValidacaoPilaJson;
+import br.ufsm.csi.pilacoin.repository.PilaCoinRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.Entity;
 import lombok.SneakyThrows;
 import org.apache.coyote.http11.filters.ChunkedInputFilter;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -30,10 +32,13 @@ import java.util.ArrayList;
 public class ValidaPilaService {
     private final RequisicoesService requisicoesService;
     private DificuldadeService dificuldadeService;
+
+    private PilaCoinRepository pilaCoinRepository;
     private static ArrayList<String> ignorePilas = new ArrayList<>();
 
-    public ValidaPilaService(RequisicoesService requisicoesService, DificuldadeService dificuldadeService) {
+    public ValidaPilaService(RequisicoesService requisicoesService, DificuldadeService dificuldadeService, PilaCoinRepository pilaCoinRepository) {
         this.requisicoesService = requisicoesService;
+        this.pilaCoinRepository = pilaCoinRepository;
         this.dificuldadeService = dificuldadeService;
     }
 
@@ -97,8 +102,11 @@ public class ValidaPilaService {
                             requisicoesService.enviarRequisicao("pila-validado", jsonValidado);
                             System.out.println("Minha assinatura: "+ jsonValidado);
                             System.out.println("Validado!");
+                            pilaCoinRepository.save(validacaoPilaJson);
+
                         } else {
                             requisicoesService.enviarRequisicao("pila-minerado", strPila);
+
                         }
                     }
 
